@@ -1,5 +1,5 @@
-import { VoltageType } from "../../types/VoltageType";
-import { EncodingType } from "../../types/EncodingType";
+import { VoltageType } from "../../model/VoltageType";
+import { EncodingType } from "../../model/EncodingType";
 
 export default function getBitsVoltage(
   bits: string[],
