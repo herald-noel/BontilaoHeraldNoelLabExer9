@@ -1,10 +1,12 @@
 <script lang="ts">
-  import RenderEncodedTable from "./utils/renderEncodedTable";
+  import EncodedTable from "./utils/encodedTable";
 
-  import { EncodingType } from "../types/EncodingType";
+  import { EncodingType } from "../model/EncodingType";
+  import getBitsVoltage from "./utils/getBitsVoltage";
 
   let testBinaryStringInput = "01001110";
   let binaryInputArray = testBinaryStringInput.split("");
+  const voltages = getBitsVoltage(binaryInputArray, EncodingType.Nrzl);
   // console.log(getBitsVoltage(binaryInputArray, EncodingType.Nrzi));
 </script>
 
@@ -18,13 +20,10 @@
   </thead>
   <tbody>
     <tr>
-      {@html RenderEncodedTable.nonReturnToZeroLevel(binaryInputArray)}
+      {@html EncodedTable.render(voltages)}
     </tr>
     <tr>
-      {#each binaryInputArray as bit}
-        <td class="border"></td>
-        <td class="border"></td>
-      {/each}
+      {@html EncodedTable.render(voltages, EncodedTable.RenderType.Lower)}
     </tr>
   </tbody>
 </table>

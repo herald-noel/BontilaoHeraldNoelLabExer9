@@ -1,6 +1,7 @@
 <script lang="ts">
-  import Result from "./lib/Result.svelte";
-  import { EncodingType } from "./types/EncodingType";
+  import "./app.css";
+  import TableResult from "./lib/TableResult.svelte";
+  import { EncodingType } from "./model/EncodingType";
 
   let selectedEncodingType = "";
   function handleEncodingChange() {
@@ -25,7 +26,5 @@
       >Differential Manchester</option
     >
   </select>
-  <div class="card">
-    <Result encodingType={selectedEncodingType} />
-  </div>
+  <TableResult />
 </main>
