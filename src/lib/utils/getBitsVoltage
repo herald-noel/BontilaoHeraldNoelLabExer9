@@ -40,5 +40,22 @@ export default function getBitsVoltage(
             : voltages.push(VoltageType.Low)
           : voltages.push(VoltageType.Zero);
       });
+
+    case EncodingType.Pseudoternary:
+      let previousBinaryZero = VoltageType.Low;
+      bits.forEach((element) => {
+        element === "0"
+          ? previousBinaryZero === VoltageType.Low
+            ? voltages.push(VoltageType.High)
+            : voltages.push(VoltageType.Low)
+          : voltages.push(VoltageType.Zero);
+      });
+
+    case EncodingType.Manchester:
+      bits.forEach((element) => {
+        element === "1"
+          ? voltages.push(VoltageType.LowToHigh)
+          : voltages.push(VoltageType.HighToLow);
+      });
   }
 }
