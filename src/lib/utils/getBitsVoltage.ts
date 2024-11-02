@@ -4,46 +4,35 @@ import { EncodingType } from "../../types/EncodingType";
 export default function getBitsVoltage(
   bits: string[],
   encodingType: EncodingType
-): Array<VoltageType> {
-  const voltages: Array<VoltageType> = [];
+): VoltageType[] {
+  const voltages: VoltageType[] = [];
+
+  const toggleVoltage = (current: VoltageType): VoltageType =>
+    current === VoltageType.High ? VoltageType.Low : VoltageType.High;
 
   switch (encodingType) {
     case EncodingType.Nrzl:
-      bits.forEach((element) => {
-        element === "1"
-          ? voltages.push(VoltageType.High)
-          : voltages.push(VoltageType.Low);
-      });
+      bits.forEach((bit) =>
+        voltages.push(bit === "1" ? VoltageType.High : VoltageType.Low)
+      );
       break;
 
     case EncodingType.Nrzi:
-      let previousVoltage = VoltageType.Low;
-      bits.forEach((element) => {
-        if (element === "1") {
-          if (previousVoltage === VoltageType.Low) {
-            voltages.push(VoltageType.High);
-            previousVoltage = VoltageType.High;
-          } else {
-            voltages.push(VoltageType.Low);
-            previousVoltage = VoltageType.Low;
-          }
-        } else {
-          voltages.push(previousVoltage);
+      let nrziVoltage = VoltageType.Low;
+      bits.forEach((bit) => {
+        if (bit === "1") {
+          nrziVoltage = toggleVoltage(nrziVoltage);
         }
+        voltages.push(nrziVoltage);
       });
       break;
 
     case EncodingType.BipolarAMI:
-      let previousBinaryOne = VoltageType.Low;
-      bits.forEach((element) => {
-        if (element === "1") {
-          if (previousBinaryOne === VoltageType.Low) {
-            voltages.push(VoltageType.High);
-            previousBinaryOne = VoltageType.High;
-          } else {
-            voltages.push(VoltageType.Low);
-            previousBinaryOne = VoltageType.Low;
-          }
+      let amiVoltage = VoltageType.Low;
+      bits.forEach((bit) => {
+        if (bit === "1") {
+          amiVoltage = toggleVoltage(amiVoltage);
+          voltages.push(amiVoltage);
         } else {
           voltages.push(VoltageType.Zero);
         }
@@ -51,16 +40,11 @@ export default function getBitsVoltage(
       break;
 
     case EncodingType.Pseudoternary:
-      let previousBinaryZero = VoltageType.Low;
-      bits.forEach((element) => {
-        if (element === "0") {
-          if (previousBinaryZero === VoltageType.Low) {
-            voltages.push(VoltageType.High);
-            previousBinaryZero = VoltageType.High;
-          } else {
-            voltages.push(VoltageType.Low);
-            previousBinaryZero = VoltageType.Low;
-          }
+      let pseudoVoltage = VoltageType.Low;
+      bits.forEach((bit) => {
+        if (bit === "0") {
+          pseudoVoltage = toggleVoltage(pseudoVoltage);
+          voltages.push(pseudoVoltage);
         } else {
           voltages.push(VoltageType.Zero);
         }
@@ -68,14 +52,26 @@ export default function getBitsVoltage(
       break;
 
     case EncodingType.Manchester:
-      bits.forEach((element) => {
-        element === "1"
-          ? voltages.push(VoltageType.LowToHigh)
-          : voltages.push(VoltageType.HighToLow);
+      bits.forEach((bit) =>
+        voltages.push(
+          bit === "1" ? VoltageType.LowToHigh : VoltageType.HighToLow
+        )
+      );
+      break;
+
+    case EncodingType.DifferentialManchester:
+      let diffVoltage = VoltageType.LowToHigh;
+      bits.forEach((bit) => {
+        if (bit === "1") {
+          diffVoltage =
+            diffVoltage === VoltageType.HighToLow
+              ? VoltageType.LowToHigh
+              : VoltageType.HighToLow;
+        }
+        voltages.push(diffVoltage);
       });
       break;
   }
 
-  console.log("the length is", voltages.length);
   return voltages;
 }
