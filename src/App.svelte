@@ -3,7 +3,7 @@
   import TableResult from "./lib/TableResult.svelte";
   import { EncodingType } from "./model/EncodingType";
 
-  let selectedEncodingType = "";
+  let selectedEncodingType: EncodingType;
   function handleEncodingChange() {
     console.log("Selected Encoding Type:", selectedEncodingType);
   }
@@ -26,5 +26,5 @@
       >Differential Manchester</option
     >
   </select>
-  <TableResult />
+  <TableResult {selectedEncodingType} />
 </main>

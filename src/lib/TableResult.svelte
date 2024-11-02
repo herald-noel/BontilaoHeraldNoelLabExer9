@@ -1,13 +1,18 @@
 <script lang="ts">
   import EncodedTable from "./utils/encodedTable";
-
   import { EncodingType } from "../model/EncodingType";
   import getBitsVoltage from "./utils/getBitsVoltage";
+  import type { VoltageType } from "../model/VoltageType";
 
+  export let selectedEncodingType;
   let testBinaryStringInput = "01001110";
-  let binaryInputArray = testBinaryStringInput.split("");
-  const voltages = getBitsVoltage(binaryInputArray, EncodingType.Nrzl);
-  // console.log(getBitsVoltage(binaryInputArray, EncodingType.Nrzi));
+  let binaryInputArray: string[];
+  let voltages: Array<VoltageType>;
+
+  $: {
+    binaryInputArray = testBinaryStringInput.split("");
+    voltages = getBitsVoltage(binaryInputArray, selectedEncodingType);
+  }
 </script>
 
 <table>
@@ -33,8 +38,7 @@
     width: 100%;
     border-collapse: collapse;
   }
-  th,
-  td {
+  th {
     padding: 32px;
   }
   th {
