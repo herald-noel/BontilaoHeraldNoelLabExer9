@@ -1,47 +1,31 @@
 <script lang="ts">
-  import svelteLogo from './assets/svelte.svg'
-  import viteLogo from '/vite.svg'
-  import Counter from './lib/Counter.svelte'
+  import Result from "./lib/Result.svelte";
+  import { EncodingType } from "./types/EncodingType";
+
+  let selectedEncodingType = "";
+  function handleEncodingChange() {
+    console.log("Selected Encoding Type:", selectedEncodingType);
+  }
 </script>
 
 <main>
-  <div>
-    <a href="https://vite.dev" target="_blank" rel="noreferrer">
-      <img src={viteLogo} class="logo" alt="Vite Logo" />
-    </a>
-    <a href="https://svelte.dev" target="_blank" rel="noreferrer">
-      <img src={svelteLogo} class="logo svelte" alt="Svelte Logo" />
-    </a>
-  </div>
-  <h1>Vite + Svelte</h1>
-
+  <label for="encodingType">Choose an Encoding Type:&nbsp</label>
+  <select
+    name="encodingType"
+    id="encodingType"
+    bind:value={selectedEncodingType}
+    on:change={handleEncodingChange}
+  >
+    <option value={EncodingType.Nrzl}>NRZ-L</option>
+    <option value={EncodingType.Nrzi}>NRZ-I</option>
+    <option value={EncodingType.BipolarAMI}>Bipolar AMI</option>
+    <option value={EncodingType.Pseudoternary}>Pseudoternary</option>
+    <option value={EncodingType.Manchester}>Manchester</option>
+    <option value={EncodingType.DifferentialManchester}
+      >Differential Manchester</option
+    >
+  </select>
   <div class="card">
-    <Counter />
+    <Result />
   </div>
-
-  <p>
-    Check out <a href="https://github.com/sveltejs/kit#readme" target="_blank" rel="noreferrer">SvelteKit</a>, the official Svelte app framework powered by Vite!
-  </p>
-
-  <p class="read-the-docs">
-    Click on the Vite and Svelte logos to learn more
-  </p>
 </main>
-
-<style>
-  .logo {
-    height: 6em;
-    padding: 1.5em;
-    will-change: filter;
-    transition: filter 300ms;
-  }
-  .logo:hover {
-    filter: drop-shadow(0 0 2em #646cffaa);
-  }
-  .logo.svelte:hover {
-    filter: drop-shadow(0 0 2em #ff3e00aa);
-  }
-  .read-the-docs {
-    color: #888;
-  }
-</style>
