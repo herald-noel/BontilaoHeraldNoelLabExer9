@@ -26,6 +26,6 @@
     >
   </select>
   <div class="card">
-    <Result />
+    <Result encodingType={selectedEncodingType} />
   </div>
 </main>
