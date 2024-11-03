@@ -1,6 +1,5 @@
 <script lang="ts">
   import EncodedTable from "./utils/encodedTable";
-  import { EncodingType } from "../model/EncodingType";
   import getBitsVoltage from "./utils/getBitsVoltage";
   import type { VoltageType } from "../model/VoltageType";
 

@@ -48,11 +48,9 @@ export default class EncodedTable {
 
   static addBorders(
     encodingType: EncodingType,
-    renderType: RenderType,
     borderTypes: BorderType[],
     currVoltage: VoltageType,
-    nextVoltage: VoltageType | null,
-    previousAltBorderX: BorderType
+    nextVoltage: VoltageType | null
   ): BorderBuilder[] {
     const borderBuilders: BorderBuilder[] = [];
     borderTypes.forEach((borderType, index) => {
@@ -165,7 +163,6 @@ export default class EncodedTable {
     voltages: Array<VoltageType>,
     renderType = RenderType.Upper
   ) {
-    let previousAltBorderX = BorderType.BOTTOM;
     return voltages
       .map((currVoltage, index) => {
         const nextVoltage = voltages[index + 1] ?? null;
@@ -174,27 +171,12 @@ export default class EncodedTable {
           currVoltage
         );
 
-        const toggleBorderX = (border: BorderType) => {
-          return border === BorderType.BOTTOM
-            ? BorderType.TOP
-            : BorderType.BOTTOM;
-        };
-
         const borderBuilders = this.addBorders(
           encodingType,
-          renderType,
           borderTypes,
           currVoltage,
-          nextVoltage,
-          previousAltBorderX
+          nextVoltage
         );
-
-        if (
-          encodingType === EncodingType.BipolarAMI &&
-          currVoltage === VoltageType.High
-        ) {
-          previousAltBorderX = toggleBorderX(previousAltBorderX);
-        }
 
         return `
           <td class="${
