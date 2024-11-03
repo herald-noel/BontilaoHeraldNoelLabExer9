@@ -3,7 +3,8 @@ import { EncodingType } from "../../model/EncodingType";
 
 export default function getBitsVoltage(
   bits: string[],
-  encodingType: EncodingType
+  encodingType: EncodingType,
+  startVoltage: VoltageType.HighToLow | VoltageType.LowToHigh
 ): VoltageType[] {
   const voltages: VoltageType[] = [];
 
@@ -60,7 +61,7 @@ export default function getBitsVoltage(
       break;
 
     case EncodingType.DifferentialManchester:
-      let diffVoltage = VoltageType.LowToHigh;
+      let diffVoltage = startVoltage;
       bits.forEach((bit) => {
         if (bit === "1") {
           diffVoltage =

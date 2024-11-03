@@ -1,17 +1,22 @@
 <script lang="ts">
   import EncodedTable from "./utils/encodedTable";
   import getBitsVoltage from "./utils/getBitsVoltage";
-  import type { VoltageType } from "../model/VoltageType";
+  import { VoltageType } from "../model/VoltageType";
 
   export let selectedEncodingType;
   export let binaryInputString;
 
   let binaryInputArray: string[];
   let voltages: Array<VoltageType>;
+  const startVoltage = VoltageType.LowToHigh;
 
   $: {
     binaryInputArray = binaryInputString.split("");
-    voltages = getBitsVoltage(binaryInputArray, selectedEncodingType);
+    voltages = getBitsVoltage(
+      binaryInputArray,
+      selectedEncodingType,
+      startVoltage
+    );
   }
 </script>
 
@@ -25,12 +30,13 @@
   </thead>
   <tbody>
     <tr>
-      {@html EncodedTable.render(selectedEncodingType, voltages)}
+      {@html EncodedTable.render(selectedEncodingType, voltages, startVoltage)}
     </tr>
     <tr>
       {@html EncodedTable.render(
         selectedEncodingType,
         voltages,
+        startVoltage,
         EncodedTable.RenderType.Lower
       )}
     </tr>

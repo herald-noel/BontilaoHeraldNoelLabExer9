@@ -174,9 +174,9 @@ export default class EncodedTable {
   static render(
     encodingType: EncodingType,
     voltages: Array<VoltageType>,
+    startVoltage: VoltageType.LowToHigh | VoltageType.HighToLow,
     renderType = RenderType.Upper
   ) {
-    const startVoltage = VoltageType.LowToHigh;
     let isFirstBit = true;
     let isLastBit = true;
     return voltages
