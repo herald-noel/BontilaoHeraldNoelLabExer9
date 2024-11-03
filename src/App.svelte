@@ -14,6 +14,17 @@
     receivedData = event.detail.data;
     startVoltage = receivedData ? VoltageType.LowToHigh : VoltageType.HighToLow;
   }
+
+  let errorMessage: string = "";
+  function handleInput(event: Event) {
+    const input = (event.target as HTMLInputElement).value;
+    if (/^[01]*$/.test(input)) {
+      binaryInputString = input;
+      errorMessage = "";
+    } else {
+      errorMessage = "Please enter a valid binary string (only 0s and 1s).";
+    }
+  }
 </script>
 
 <main class="flex flex-col items-center bg-gray-50 min-h-screen p-8">
@@ -28,9 +39,15 @@
     <input
       id="binaryInput"
       type="text"
-      bind:value={binaryInputString}
-      class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+      value={binaryInputString}
+      on:input={handleInput}
+      class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500
+           {errorMessage ? 'border-red-500' : ''}"
     />
+
+    {#if errorMessage}
+      <p class="text-red-500 text-sm mt-1">{errorMessage}</p>
+    {/if}
   </div>
 
   <div class="w-full max-w-md bg-white rounded-lg shadow-md p-6 mb-6">
