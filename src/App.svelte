@@ -1,10 +1,19 @@
 <script lang="ts">
   import "./app.css";
   import TableResult from "./lib/TableResult.svelte";
+  import ToggleVoltage from "./lib/ToggleVoltage.svelte";
   import { EncodingType } from "./model/EncodingType";
+  import { VoltageType } from "./model/VoltageType";
 
   let selectedEncodingType: EncodingType;
   let binaryInputString: string = "01001110";
+  let startVoltage = VoltageType.HighToLow;
+
+  let receivedData: boolean = false;
+  function handleDataSent(event: CustomEvent<{ data: boolean }>) {
+    receivedData = event.detail.data;
+    startVoltage = receivedData ? VoltageType.LowToHigh : VoltageType.HighToLow;
+  }
 </script>
 
 <main class="flex flex-col items-center bg-gray-50 min-h-screen p-8">
@@ -43,8 +52,13 @@
       >
     </select>
   </div>
+  {#if selectedEncodingType === EncodingType.DifferentialManchester}
+    <div class="mb-6">
+      <ToggleVoltage on:dataSent={handleDataSent} />
+    </div>
+  {/if}
 
   <div class="w-full max-w-4xl overflow-auto">
-    <TableResult {selectedEncodingType} {binaryInputString} />
+    <TableResult {selectedEncodingType} {binaryInputString} {startVoltage} />
   </div>
 </main>

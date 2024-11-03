@@ -5,10 +5,10 @@
 
   export let selectedEncodingType;
   export let binaryInputString;
+  export let startVoltage;
 
   let binaryInputArray: string[];
   let voltages: Array<VoltageType>;
-  const startVoltage = VoltageType.LowToHigh;
 
   $: {
     binaryInputArray = binaryInputString.split("");
