@@ -19,27 +19,19 @@ export default class BorderBuilder {
   }
 
   addTop(): this {
-    return this.addClass(
-      `border-t-[${this.color}] border-t-${this.borderWidth}`
-    );
+    return this.addClass(`border-t-${this.color} border-t-${this.borderWidth}`);
   }
 
   addRight(): this {
-    return this.addClass(
-      `border-r-[${this.color}] border-r-${this.borderWidth}`
-    );
+    return this.addClass(`border-r-${this.color} border-r-${this.borderWidth}`);
   }
 
   addBottom(): this {
-    return this.addClass(
-      `border-b-[${this.color}] border-b-${this.borderWidth}`
-    );
+    return this.addClass(`border-b-${this.color} border-b-${this.borderWidth}`);
   }
 
   addLeft(): this {
-    return this.addClass(
-      `border-l-[${this.color}] border-l-${this.borderWidth}`
-    );
+    return this.addClass(`border-l-${this.color} border-l-${this.borderWidth}`);
   }
 
   build(): string {
