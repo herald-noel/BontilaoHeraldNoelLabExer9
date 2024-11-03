@@ -72,14 +72,19 @@ export default class EncodedTable {
       switch (borderType) {
         case BorderType.TOP:
           renderBorder.addTop();
-          if (currVoltage === VoltageType.High) {
-            if (index === 1) renderBorder.addRight();
-            else renderBorder.addLeft();
+          if (
+            encodingType === EncodingType.BipolarAMI ||
+            encodingType === EncodingType.Pseudoternary
+          ) {
+            if (currVoltage === VoltageType.High) {
+              if (index === 1) renderBorder.addRight();
+              else renderBorder.addLeft();
+            }
+            if (index === 1 && currVoltage === VoltageType.Zero) {
+              renderBorder.addCustomClass("border-r-0");
+            }
           }
           if (index === 0 && currVoltage === VoltageType.HighToLow) {
-            renderBorder.addCustomClass("border-r-0");
-          }
-          if (index === 1 && currVoltage === VoltageType.Zero) {
             renderBorder.addCustomClass("border-r-0");
           }
           if (
@@ -113,12 +118,17 @@ export default class EncodedTable {
           ) {
             addRightBorderRightCell(true);
           }
-          if (index === 1 && currVoltage !== VoltageType.Low)
-            renderBorder.addCustomClass("border-r-0");
+          if (
+            encodingType === EncodingType.BipolarAMI ||
+            encodingType === EncodingType.Pseudoternary
+          ) {
+            if (index === 1 && currVoltage !== VoltageType.Low)
+              renderBorder.addCustomClass("border-r-0");
 
-          if (currVoltage === VoltageType.Low) {
-            if (index === 1) renderBorder.addRight();
-            else renderBorder.addLeft();
+            if (currVoltage === VoltageType.Low) {
+              if (index === 1) renderBorder.addRight();
+              else renderBorder.addLeft();
+            }
           }
           break;
         case BorderType.LEFT:
@@ -137,7 +147,12 @@ export default class EncodedTable {
           ) {
             addRightBorderRightCell();
           }
-          if (index === 1) renderBorder.addCustomClass("border-r-0");
+          if (
+            index === 1 &&
+            (encodingType === EncodingType.BipolarAMI ||
+              encodingType === EncodingType.Pseudoternary)
+          )
+            renderBorder.addCustomClass("border-r-0");
           break;
       }
       borderBuilders.push(renderBorder);
