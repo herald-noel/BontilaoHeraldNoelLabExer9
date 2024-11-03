@@ -51,7 +51,8 @@ export default class EncodedTable {
     renderType: RenderType,
     borderTypes: BorderType[],
     currVoltage: VoltageType,
-    nextVoltage: VoltageType | null
+    nextVoltage: VoltageType | null,
+    previousAltBorderX: BorderType
   ): BorderBuilder[] {
     const borderBuilders: BorderBuilder[] = [];
     borderTypes.forEach((borderType, index) => {
@@ -71,7 +72,14 @@ export default class EncodedTable {
       switch (borderType) {
         case BorderType.TOP:
           renderBorder.addTop();
+          if (currVoltage === VoltageType.High) {
+            if (index === 1) renderBorder.addRight();
+            else renderBorder.addLeft();
+          }
           if (index === 0 && currVoltage === VoltageType.HighToLow) {
+            renderBorder.addCustomClass("border-r-0");
+          }
+          if (index === 1 && currVoltage === VoltageType.Zero) {
             renderBorder.addCustomClass("border-r-0");
           }
           if (
@@ -105,6 +113,13 @@ export default class EncodedTable {
           ) {
             addRightBorderRightCell(true);
           }
+          if (index === 1 && currVoltage !== VoltageType.Low)
+            renderBorder.addCustomClass("border-r-0");
+
+          if (currVoltage === VoltageType.Low) {
+            if (index === 1) renderBorder.addRight();
+            else renderBorder.addLeft();
+          }
           break;
         case BorderType.LEFT:
           renderBorder.addLeft();
@@ -122,6 +137,7 @@ export default class EncodedTable {
           ) {
             addRightBorderRightCell();
           }
+          if (index === 1) renderBorder.addCustomClass("border-r-0");
           break;
       }
       borderBuilders.push(renderBorder);
@@ -134,6 +150,7 @@ export default class EncodedTable {
     voltages: Array<VoltageType>,
     renderType = RenderType.Upper
   ) {
+    let previousAltBorderX = BorderType.BOTTOM;
     return voltages
       .map((currVoltage, index) => {
         const nextVoltage = voltages[index + 1] ?? null;
@@ -141,13 +158,29 @@ export default class EncodedTable {
           renderType,
           currVoltage
         );
+
+        const toggleBorderX = (border: BorderType) => {
+          return border === BorderType.BOTTOM
+            ? BorderType.TOP
+            : BorderType.BOTTOM;
+        };
+
         const borderBuilders = this.addBorders(
           encodingType,
           renderType,
           borderTypes,
           currVoltage,
-          nextVoltage
+          nextVoltage,
+          previousAltBorderX
         );
+
+        if (
+          encodingType === EncodingType.BipolarAMI &&
+          currVoltage === VoltageType.High
+        ) {
+          previousAltBorderX = toggleBorderX(previousAltBorderX);
+        }
+
         return `
           <td class="${
             this.commonCellClasses
