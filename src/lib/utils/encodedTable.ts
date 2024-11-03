@@ -1,6 +1,7 @@
 import { BorderType } from "../../model/BorderType";
 import { VoltageType } from "../../model/VoltageType";
 import BorderBuilder from "./borderBuilder";
+import { EncodingType } from "../../model/EncodingType";
 
 enum RenderType {
   Upper,
@@ -46,6 +47,8 @@ export default class EncodedTable {
   }
 
   static addBorders(
+    encodingType: EncodingType,
+    renderType: RenderType,
     borderTypes: BorderType[],
     currVoltage: VoltageType,
     nextVoltage: VoltageType | null
@@ -71,7 +74,17 @@ export default class EncodedTable {
           if (index === 0 && VoltageType.HighToLow) {
             renderBorder.addCustomClass("border-r-0");
           }
-          addRightBorderRightCell();
+          if (
+            encodingType === EncodingType.Nrzl ||
+            encodingType === EncodingType.Nrzi
+          ) {
+            addRightBorderRightCell();
+          } else if (
+            encodingType === EncodingType.Manchester ||
+            encodingType === EncodingType.DifferentialManchester
+          ) {
+            addRightBorderRightCell(true);
+          }
           break;
         case BorderType.RIGHT:
           renderBorder.addRight();
@@ -81,13 +94,34 @@ export default class EncodedTable {
           if (index === 0 && VoltageType.HighToLow) {
             renderBorder.addCustomClass("border-r-0");
           }
-          addRightBorderRightCell();
+          if (
+            encodingType === EncodingType.Nrzl ||
+            encodingType === EncodingType.Nrzi
+          ) {
+            addRightBorderRightCell();
+          } else if (
+            encodingType === EncodingType.Manchester ||
+            encodingType === EncodingType.DifferentialManchester
+          ) {
+            addRightBorderRightCell(true);
+          }
           break;
         case BorderType.LEFT:
           renderBorder.addLeft();
+          if (
+            encodingType === EncodingType.Manchester ||
+            encodingType === EncodingType.DifferentialManchester
+          ) {
+            addRightBorderRightCell(true);
+          }
           break;
         case BorderType.NONE:
-          addRightBorderRightCell();
+          if (
+            encodingType === EncodingType.Nrzl ||
+            encodingType === EncodingType.Nrzi
+          ) {
+            addRightBorderRightCell();
+          }
           break;
       }
       borderBuilders.push(renderBorder);
@@ -95,7 +129,11 @@ export default class EncodedTable {
     return borderBuilders;
   }
 
-  static render(voltages: Array<VoltageType>, renderType = RenderType.Upper) {
+  static render(
+    encodingType: EncodingType,
+    voltages: Array<VoltageType>,
+    renderType = RenderType.Upper
+  ) {
     return voltages
       .map((currVoltage, index) => {
         const nextVoltage = voltages[index + 1] ?? null;
@@ -104,11 +142,12 @@ export default class EncodedTable {
           currVoltage
         );
         const borderBuilders = this.addBorders(
+          encodingType,
+          renderType,
           borderTypes,
           currVoltage,
           nextVoltage
         );
-
         return `
           <td class="${
             this.commonCellClasses

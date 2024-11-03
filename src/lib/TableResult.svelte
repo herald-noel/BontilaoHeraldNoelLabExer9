@@ -25,10 +25,14 @@
   </thead>
   <tbody>
     <tr>
-      {@html EncodedTable.render(voltages)}
+      {@html EncodedTable.render(selectedEncodingType, voltages)}
     </tr>
     <tr>
-      {@html EncodedTable.render(voltages, EncodedTable.RenderType.Lower)}
+      {@html EncodedTable.render(
+        selectedEncodingType,
+        voltages,
+        EncodedTable.RenderType.Lower
+      )}
     </tr>
   </tbody>
 </table>
