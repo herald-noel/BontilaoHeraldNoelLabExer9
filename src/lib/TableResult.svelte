@@ -4,12 +4,13 @@
   import type { VoltageType } from "../model/VoltageType";
 
   export let selectedEncodingType;
-  let testBinaryStringInput = "01001110";
+  export let binaryInputString;
+
   let binaryInputArray: string[];
   let voltages: Array<VoltageType>;
 
   $: {
-    binaryInputArray = testBinaryStringInput.split("");
+    binaryInputArray = binaryInputString.split("");
     voltages = getBitsVoltage(binaryInputArray, selectedEncodingType);
   }
 </script>

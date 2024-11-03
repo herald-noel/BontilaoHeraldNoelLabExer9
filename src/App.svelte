@@ -4,27 +4,47 @@
   import { EncodingType } from "./model/EncodingType";
 
   let selectedEncodingType: EncodingType;
-  function handleEncodingChange() {
-    console.log("Selected Encoding Type:", selectedEncodingType);
-  }
+  let binaryInputString: string = "01001110";
 </script>
 
-<main>
-  <label for="encodingType">Choose an Encoding Type:&nbsp</label>
-  <select
-    name="encodingType"
-    id="encodingType"
-    bind:value={selectedEncodingType}
-    on:change={handleEncodingChange}
-  >
-    <option value={EncodingType.Nrzl}>NRZ-L</option>
-    <option value={EncodingType.Nrzi}>NRZ-I</option>
-    <option value={EncodingType.BipolarAMI}>Bipolar AMI</option>
-    <option value={EncodingType.Pseudoternary}>Pseudoternary</option>
-    <option value={EncodingType.Manchester}>Manchester</option>
-    <option value={EncodingType.DifferentialManchester}
-      >Differential Manchester</option
+<main class="flex flex-col items-center bg-gray-50 min-h-screen p-8">
+  <h1 class="text-2xl font-semibold text-gray-700 mb-4">
+    Data Encoding Techniques
+  </h1>
+
+  <div class="w-full max-w-md bg-white rounded-lg shadow-md p-6 mb-6">
+    <label for="binaryInput" class="block text-gray-600 font-medium mb-2"
+      >Binary Input:</label
     >
-  </select>
-  <TableResult {selectedEncodingType} />
+    <input
+      id="binaryInput"
+      type="text"
+      bind:value={binaryInputString}
+      class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+    />
+  </div>
+
+  <div class="w-full max-w-md bg-white rounded-lg shadow-md p-6 mb-6">
+    <label for="encodingType" class="block text-gray-600 font-medium mb-2"
+      >Encoding Type:</label
+    >
+    <select
+      id="encodingType"
+      bind:value={selectedEncodingType}
+      class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+    >
+      <option value={EncodingType.Nrzl}>NRZ-L</option>
+      <option value={EncodingType.Nrzi}>NRZ-I</option>
+      <option value={EncodingType.BipolarAMI}>Bipolar AMI</option>
+      <option value={EncodingType.Pseudoternary}>Pseudoternary</option>
+      <option value={EncodingType.Manchester}>Manchester</option>
+      <option value={EncodingType.DifferentialManchester}
+        >Differential Manchester</option
+      >
+    </select>
+  </div>
+
+  <div class="w-full max-w-4xl overflow-auto">
+    <TableResult {selectedEncodingType} {binaryInputString} />
+  </div>
 </main>
