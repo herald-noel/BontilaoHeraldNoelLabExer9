@@ -35,35 +35,53 @@ export default class EncodedTable {
 
   static commonCellClasses = "p-[32px] border";
 
+  static getBorderTypes(
+    renderType: RenderType,
+    voltage: VoltageType
+  ): BorderType[] {
+    if (renderType === RenderType.Upper) {
+      return this.borderLookUp[voltage][0];
+    }
+    return this.borderLookUp[voltage][1];
+  }
+
+  static addBorders(borderTypes: BorderType[]): BorderBuilder[] {
+    const borderBuilders: BorderBuilder[] = [];
+    borderTypes.forEach((borderType, index) => {
+      const renderBorder = new BorderBuilder();
+      switch (borderType) {
+        case BorderType.TOP:
+          renderBorder.addTop();
+          if (index === 0 && VoltageType.HighToLow) {
+            renderBorder.addCustomClass("border-r-0");
+          }
+          break;
+        case BorderType.RIGHT:
+          renderBorder.addRight();
+          break;
+        case BorderType.BOTTOM:
+          renderBorder.addBottom();
+          if (index === 0 && VoltageType.HighToLow) {
+            renderBorder.addCustomClass("border-r-0");
+          }
+          break;
+        case BorderType.LEFT:
+          renderBorder.addLeft();
+          break;
+      }
+      borderBuilders.push(renderBorder);
+    });
+    return borderBuilders;
+  }
+
   static render(voltages: Array<VoltageType>, renderType = RenderType.Upper) {
     return voltages
       .map((voltage) => {
-        let borderTypes: BorderType[] = [];
-        if (renderType === RenderType.Upper) {
-          borderTypes = this.borderLookUp[voltage][0];
-        } else {
-          borderTypes = this.borderLookUp[voltage][1];
-        }
-
-        let borderBuilders: BorderBuilder[] = [];
-        borderTypes.forEach((borderType) => {
-          const renderBorder = new BorderBuilder();
-          switch (borderType) {
-            case BorderType.TOP:
-              renderBorder.addTop();
-              break;
-            case BorderType.RIGHT:
-              renderBorder.addRight();
-              break;
-            case BorderType.BOTTOM:
-              renderBorder.addBottom();
-              break;
-            case BorderType.LEFT:
-              renderBorder.addLeft();
-              break;
-          }
-          borderBuilders.push(renderBorder);
-        });
+        const borderTypes: BorderType[] = this.getBorderTypes(
+          renderType,
+          voltage
+        );
+        const borderBuilders = this.addBorders(borderTypes);
 
         return `
           <td class="${
