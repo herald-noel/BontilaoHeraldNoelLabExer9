@@ -67,35 +67,38 @@ export default class EncodedTable {
         }
       };
 
+      const handleFullVoltageTransition = () => {
+        if (
+          encodingType === EncodingType.Nrzl ||
+          encodingType === EncodingType.Nrzi
+        ) {
+          addRightBorderRightCell();
+        } else if (
+          encodingType === EncodingType.Manchester ||
+          encodingType === EncodingType.DifferentialManchester
+        ) {
+          addRightBorderRightCell(true);
+        }
+      };
+
       switch (borderType) {
         case BorderType.TOP:
           renderBorder.addTop();
-          if (
-            encodingType === EncodingType.BipolarAMI ||
-            encodingType === EncodingType.Pseudoternary
-          ) {
-            if (currVoltage === VoltageType.High) {
-              if (index === 1) renderBorder.addRight();
-              else renderBorder.addLeft();
-            }
-            if (index === 1 && currVoltage === VoltageType.Zero) {
-              renderBorder.addCustomClass("border-r-0");
-            }
-          }
           if (index === 0 && currVoltage === VoltageType.HighToLow) {
             renderBorder.addCustomClass("border-r-0");
           }
           if (
-            encodingType === EncodingType.Nrzl ||
-            encodingType === EncodingType.Nrzi
+            [EncodingType.BipolarAMI, EncodingType.Pseudoternary].includes(
+              encodingType
+            )
           ) {
-            addRightBorderRightCell();
-          } else if (
-            encodingType === EncodingType.Manchester ||
-            encodingType === EncodingType.DifferentialManchester
-          ) {
-            addRightBorderRightCell(true);
+            if (currVoltage === VoltageType.High) {
+              index === 1 ? renderBorder.addRight() : renderBorder.addLeft();
+            } else if (index === 1 && currVoltage === VoltageType.Zero) {
+              renderBorder.addCustomClass("border-r-0");
+            }
           }
+          handleFullVoltageTransition();
           break;
         case BorderType.RIGHT:
           renderBorder.addRight();
@@ -106,28 +109,18 @@ export default class EncodedTable {
             renderBorder.addCustomClass("border-r-0");
           }
           if (
-            encodingType === EncodingType.Nrzl ||
-            encodingType === EncodingType.Nrzi
+            [EncodingType.BipolarAMI, EncodingType.Pseudoternary].includes(
+              encodingType
+            )
           ) {
-            addRightBorderRightCell();
-          } else if (
-            encodingType === EncodingType.Manchester ||
-            encodingType === EncodingType.DifferentialManchester
-          ) {
-            addRightBorderRightCell(true);
-          }
-          if (
-            encodingType === EncodingType.BipolarAMI ||
-            encodingType === EncodingType.Pseudoternary
-          ) {
-            if (index === 1 && currVoltage !== VoltageType.Low)
+            if (index === 1 && currVoltage !== VoltageType.Low) {
               renderBorder.addCustomClass("border-r-0");
-
+            }
             if (currVoltage === VoltageType.Low) {
-              if (index === 1) renderBorder.addRight();
-              else renderBorder.addLeft();
+              index === 1 ? renderBorder.addRight() : renderBorder.addLeft();
             }
           }
+          handleFullVoltageTransition();
           break;
         case BorderType.LEFT:
           renderBorder.addLeft();
