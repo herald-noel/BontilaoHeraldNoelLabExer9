@@ -45,16 +45,33 @@ export default class EncodedTable {
     return this.borderLookUp[voltage][1];
   }
 
-  static addBorders(borderTypes: BorderType[]): BorderBuilder[] {
+  static addBorders(
+    borderTypes: BorderType[],
+    currVoltage: VoltageType,
+    nextVoltage: VoltageType | null
+  ): BorderBuilder[] {
     const borderBuilders: BorderBuilder[] = [];
     borderTypes.forEach((borderType, index) => {
       const renderBorder = new BorderBuilder();
+
+      const addRightBorderRightCell = (checkEquality = false) => {
+        const shouldAddRightBorder =
+          index === 1 &&
+          ((checkEquality && currVoltage === nextVoltage) ||
+            (!checkEquality && currVoltage !== nextVoltage));
+
+        if (shouldAddRightBorder) {
+          renderBorder.addRight();
+        }
+      };
+
       switch (borderType) {
         case BorderType.TOP:
           renderBorder.addTop();
           if (index === 0 && VoltageType.HighToLow) {
             renderBorder.addCustomClass("border-r-0");
           }
+          addRightBorderRightCell();
           break;
         case BorderType.RIGHT:
           renderBorder.addRight();
@@ -64,9 +81,13 @@ export default class EncodedTable {
           if (index === 0 && VoltageType.HighToLow) {
             renderBorder.addCustomClass("border-r-0");
           }
+          addRightBorderRightCell();
           break;
         case BorderType.LEFT:
           renderBorder.addLeft();
+          break;
+        case BorderType.NONE:
+          addRightBorderRightCell();
           break;
       }
       borderBuilders.push(renderBorder);
@@ -76,12 +97,17 @@ export default class EncodedTable {
 
   static render(voltages: Array<VoltageType>, renderType = RenderType.Upper) {
     return voltages
-      .map((voltage) => {
+      .map((currVoltage, index) => {
+        const nextVoltage = voltages[index + 1] ?? null;
         const borderTypes: BorderType[] = this.getBorderTypes(
           renderType,
-          voltage
+          currVoltage
         );
-        const borderBuilders = this.addBorders(borderTypes);
+        const borderBuilders = this.addBorders(
+          borderTypes,
+          currVoltage,
+          nextVoltage
+        );
 
         return `
           <td class="${
