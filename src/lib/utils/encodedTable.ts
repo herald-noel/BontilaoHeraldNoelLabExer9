@@ -62,6 +62,7 @@ export default class EncodedTable {
       const addRightBorderRightCell = (checkEquality = false) => {
         const shouldAddRightBorder =
           index === 1 &&
+          !isLastBit &&
           ((checkEquality && currVoltage === nextVoltage) ||
             (!checkEquality && currVoltage !== nextVoltage));
 
@@ -178,9 +179,9 @@ export default class EncodedTable {
     renderType = RenderType.Upper
   ) {
     let isFirstBit = true;
-    let isLastBit = true;
     return voltages
       .map((currVoltage, index) => {
+        const isLastBit = index === voltages.length - 1;
         const nextVoltage = voltages[index + 1] ?? null;
         const borderTypes: BorderType[] = this.getBorderTypes(
           renderType,
@@ -198,7 +199,6 @@ export default class EncodedTable {
         );
 
         isFirstBit = false;
-        isLastBit = false;
 
         return `
           <td class="${
