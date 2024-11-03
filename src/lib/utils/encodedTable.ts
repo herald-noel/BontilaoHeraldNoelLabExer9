@@ -71,7 +71,7 @@ export default class EncodedTable {
       switch (borderType) {
         case BorderType.TOP:
           renderBorder.addTop();
-          if (index === 0 && VoltageType.HighToLow) {
+          if (index === 0 && currVoltage === VoltageType.HighToLow) {
             renderBorder.addCustomClass("border-r-0");
           }
           if (
@@ -91,7 +91,7 @@ export default class EncodedTable {
           break;
         case BorderType.BOTTOM:
           renderBorder.addBottom();
-          if (index === 0 && VoltageType.HighToLow) {
+          if (index === 0 && currVoltage === VoltageType.LowToHigh) {
             renderBorder.addCustomClass("border-r-0");
           }
           if (
