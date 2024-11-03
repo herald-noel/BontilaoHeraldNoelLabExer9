@@ -50,7 +50,10 @@ export default class EncodedTable {
     encodingType: EncodingType,
     borderTypes: BorderType[],
     currVoltage: VoltageType,
-    nextVoltage: VoltageType | null
+    nextVoltage: VoltageType | null,
+    isFirstBit: boolean,
+    isLastBit: boolean,
+    startVoltage: VoltageType
   ): BorderBuilder[] {
     const borderBuilders: BorderBuilder[] = [];
     borderTypes.forEach((borderType, index) => {
@@ -81,9 +84,22 @@ export default class EncodedTable {
         }
       };
 
+      const addStartLine = () => {
+        const isFirst = isFirstBit && index == 0;
+        const isSameVoltage = startVoltage === currVoltage;
+        if (
+          isFirst &&
+          isSameVoltage &&
+          encodingType === EncodingType.DifferentialManchester
+        ) {
+          renderBorder.addLeft();
+        }
+      };
+
       switch (borderType) {
         case BorderType.TOP:
           renderBorder.addTop();
+          addStartLine();
           if (index === 0 && currVoltage === VoltageType.HighToLow) {
             renderBorder.addCustomClass("border-r-0");
           }
@@ -102,9 +118,11 @@ export default class EncodedTable {
           break;
         case BorderType.RIGHT:
           renderBorder.addRight();
+          addStartLine();
           break;
         case BorderType.BOTTOM:
           renderBorder.addBottom();
+          addStartLine();
           if (index === 0 && currVoltage === VoltageType.LowToHigh) {
             renderBorder.addCustomClass("border-r-0");
           }
@@ -124,6 +142,7 @@ export default class EncodedTable {
           break;
         case BorderType.LEFT:
           renderBorder.addLeft();
+          addStartLine();
           if (
             encodingType === EncodingType.Manchester ||
             encodingType === EncodingType.DifferentialManchester
@@ -132,6 +151,7 @@ export default class EncodedTable {
           }
           break;
         case BorderType.NONE:
+          addStartLine();
           if (
             encodingType === EncodingType.Nrzl ||
             encodingType === EncodingType.Nrzi
@@ -156,6 +176,9 @@ export default class EncodedTable {
     voltages: Array<VoltageType>,
     renderType = RenderType.Upper
   ) {
+    const startVoltage = VoltageType.LowToHigh;
+    let isFirstBit = true;
+    let isLastBit = true;
     return voltages
       .map((currVoltage, index) => {
         const nextVoltage = voltages[index + 1] ?? null;
@@ -168,8 +191,14 @@ export default class EncodedTable {
           encodingType,
           borderTypes,
           currVoltage,
-          nextVoltage
+          nextVoltage,
+          isFirstBit,
+          isLastBit,
+          startVoltage
         );
+
+        isFirstBit = false;
+        isLastBit = false;
 
         return `
           <td class="${
