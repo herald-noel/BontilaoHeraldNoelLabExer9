@@ -20,15 +20,17 @@
   }
 </script>
 
-<table>
+<table
+  class="min-w-full border-collapse border border-gray-300 rounded-lg mb-4"
+>
   <thead>
-    <tr>
+    <tr class="bg-gray-200 text-gray-700">
       {#each binaryInputArray as bit}
-        <th colspan="2">{bit}</th>
+        <th colspan="2" class="border border-gray-300 px-4 py-2">{bit}</th>
       {/each}
     </tr>
   </thead>
-  <tbody>
+  <tbody class="bg-white text-gray-800">
     <tr>
       {@html EncodedTable.render(selectedEncodingType, voltages, startVoltage)}
     </tr>
@@ -42,16 +44,3 @@
     </tr>
   </tbody>
 </table>
-
-<style lang="postcss">
-  table {
-    width: 100%;
-    border-collapse: collapse;
-  }
-  th {
-    padding: 32px;
-  }
-  th {
-    background-color: #f2f2f2;
-  }
-</style>
