@@ -6,27 +6,31 @@ export default class BorderBuilder {
     this.strings = [];
   }
 
-  private addBorder(border: string): this {
+  private addClass(border: string): this {
     if (!this.strings.includes(border)) {
       this.strings.push(border);
     }
     return this;
   }
 
+  addCustomClass(value: string): this {
+    return this.addClass(value);
+  }
+
   addTop(): this {
-    return this.addBorder(`border-t-[${this.color}]`);
+    return this.addClass(`border-t-[${this.color}]`);
   }
 
   addRight(): this {
-    return this.addBorder(`border-r-[${this.color}]`);
+    return this.addClass(`border-r-[${this.color}]`);
   }
 
   addBottom(): this {
-    return this.addBorder(`border-b-[${this.color}]`);
+    return this.addClass(`border-b-[${this.color}]`);
   }
 
   addLeft(): this {
-    return this.addBorder(`border-l-[${this.color}]`);
+    return this.addClass(`border-l-[${this.color}]`);
   }
 
   build(): string {
