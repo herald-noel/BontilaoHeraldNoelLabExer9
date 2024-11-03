@@ -102,6 +102,11 @@ export default class EncodedTable {
           break;
         case BorderType.RIGHT:
           renderBorder.addRight();
+          if (encodingType === EncodingType.DifferentialManchester) {
+            if (index === 0) {
+              renderBorder.addLeft();
+            }
+          }
           break;
         case BorderType.BOTTOM:
           renderBorder.addBottom();
@@ -119,6 +124,12 @@ export default class EncodedTable {
             if (currVoltage === VoltageType.Low) {
               index === 1 ? renderBorder.addRight() : renderBorder.addLeft();
             }
+          }
+          if (
+            index === 0 &&
+            encodingType === EncodingType.DifferentialManchester
+          ) {
+            renderBorder.addLeft();
           }
           handleFullVoltageTransition();
           break;
