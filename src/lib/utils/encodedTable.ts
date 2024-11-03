@@ -110,7 +110,11 @@ export default class EncodedTable {
             )
           ) {
             if (currVoltage === VoltageType.High) {
-              index === 1 ? renderBorder.addRight() : renderBorder.addLeft();
+              if (index === 1) {
+                renderBorder.addRight();
+              } else if (!isFirstBit) {
+                renderBorder.addLeft();
+              }
             } else if (index === 1 && currVoltage === VoltageType.Zero) {
               renderBorder.addCustomClass("border-r-0");
             }
