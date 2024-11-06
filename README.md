@@ -1,47 +1,53 @@
-# Svelte + TS + Vite
+# Encoding Scheme Visualizer
 
-This template should help get you started developing with Svelte and TypeScript in Vite.
+A web application for visualizing different binary encoding schemes: **NRZ-L**, **NRZ-I**, **Bipolar AMI**, **Pseudoternary**, **Manchester**, and **Differential Manchester**. This tool helps users understand how binary data is represented in various encoding formats by displaying visual waveforms for each encoding method based on user input.
 
-## Recommended IDE Setup
+## Supported Encoding Schemes
 
-[VS Code](https://code.visualstudio.com/) + [Svelte](https://marketplace.visualstudio.com/items?itemName=svelte.svelte-vscode).
+1. **NRZ-L (Non-Return to Zero Level)**
 
-## Need an official Svelte framework?
+   - Encodes binary 0 as one voltage level and binary 1 as another.
 
-Check out [SvelteKit](https://github.com/sveltejs/kit#readme), which is also powered by Vite. Deploy anywhere with its serverless-first approach and adapt to various platforms, with out of the box support for TypeScript, SCSS, and Less, and easily-added support for mdsvex, GraphQL, PostCSS, Tailwind CSS, and more.
+2. **NRZ-I (Non-Return to Zero Inverted)**
 
-## Technical considerations
+   - Inverts the signal level on binary 1; binary 0 keeps the current level.
 
-**Why use this over SvelteKit?**
+3. **Bipolar AMI (Alternate Mark Inversion)**
 
-- It brings its own routing solution which might not be preferable for some users.
-- It is first and foremost a framework that just happens to use Vite under the hood, not a Vite app.
+   - Represents binary 0 as zero voltage and alternates positive and negative voltages for binary 1s.
 
-This template contains as little as possible to get started with Vite + TypeScript + Svelte, while taking into account the developer experience with regards to HMR and intellisense. It demonstrates capabilities on par with the other `create-vite` templates and is a good starting point for beginners dipping their toes into a Vite + Svelte project.
+4. **Pseudoternary**
 
-Should you later need the extended capabilities and extensibility provided by SvelteKit, the template has been structured similarly to SvelteKit so that it is easy to migrate.
+   - Opposite of Bipolar AMI, where binary 1 is zero voltage, and binary 0 alternates positive and negative.
 
-**Why `global.d.ts` instead of `compilerOptions.types` inside `jsconfig.json` or `tsconfig.json`?**
+5. **Manchester**
 
-Setting `compilerOptions.types` shuts out all other types not explicitly listed in the configuration. Using triple-slash references keeps the default TypeScript setting of accepting type information from the entire workspace, while also adding `svelte` and `vite/client` type information.
+   - Combines clock and data into a single line; binary 1 transitions from low to high and binary 0 transitions from high to low within a bit period.
 
-**Why include `.vscode/extensions.json`?**
+6. **Differential Manchester**
+   - Similar to Manchester but includes differential encoding; each bit period begins with a transition, and binary 1 is represented by no transition at the end of the period, while binary 0 has a transition.
 
-Other templates indirectly recommend extensions via the README, but this file allows VS Code to prompt the user to install the recommended extension upon opening the project.
+## Installation
 
-**Why enable `allowJs` in the TS template?**
+To set up the application locally, follow these steps:
 
-While `allowJs: false` would indeed prevent the use of `.js` files in the project, it does not prevent the use of JavaScript syntax in `.svelte` files. In addition, it would force `checkJs: false`, bringing the worst of both worlds: not being able to guarantee the entire codebase is TypeScript, and also having worse typechecking for the existing JavaScript. In addition, there are valid use cases in which a mixed codebase may be relevant.
+1. Clone the repository:
 
-**Why is HMR not preserving my local component state?**
+   ```bash
+   git clone https://github.com/yourusername/encoding-scheme-visualizer.git
+   cd encoding-scheme-visualizer
+   ```
 
-HMR state preservation comes with a number of gotchas! It has been disabled by default in both `svelte-hmr` and `@sveltejs/vite-plugin-svelte` due to its often surprising behavior. You can read the details [here](https://github.com/rixo/svelte-hmr#svelte-hmr).
+2. Clone the repository:
 
-If you have state that's important to retain within a component, consider creating an external store which would not be replaced by HMR.
+   ```bash
+   npm install
+   ```
 
-```ts
-// store.ts
-// An extremely simple external store
-import { writable } from 'svelte/store'
-export default writable(0)
-```
+3. Run the app in development mode with Vite:
+
+   ```bash
+   npm run dev
+   ```
+
+   The application should now be accessible at `http://localhost:3000`.
