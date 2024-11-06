@@ -1,6 +1,6 @@
 ## Deployed Link
 
-Try out the live version of the application [here](https://your-deployed-app-link.com).
+Try out the live version of the application [here](https://encoding-scheme.onrender.com).
 
 # Encoding Scheme Visualizer
 
