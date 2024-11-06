@@ -1,3 +1,7 @@
+## Deployed Link
+
+Try out the live version of the application [here](https://your-deployed-app-link.com).
+
 # Encoding Scheme Visualizer
 
 A web application for visualizing different binary encoding schemes: **NRZ-L**, **NRZ-I**, **Bipolar AMI**, **Pseudoternary**, **Manchester**, and **Differential Manchester**. This tool helps users understand how binary data is represented in various encoding formats by displaying visual waveforms for each encoding method based on user input.
